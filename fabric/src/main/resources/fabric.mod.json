@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 1,
+  "id": "ctrlqr",
+  "version": "${version}",
+  "name": "${name}",
+  "description": "${description}",
+  "authors": [
+    "${author}"
+  ],
+  "contact": {
+    "sources": "${sources}"
+  },
+  "license": "MIT",
+  "icon": "icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "net.unilock.ctrlqr.fabric.CtrlQRFabric"
+    ]
+  },
+  "mixins": [
+    "ctrlqr-common.mixins.json"
+  ],
+  "depends": {
+    "fabric": "*",
+    "minecraft": "~1.18.2"
+  }
+}
