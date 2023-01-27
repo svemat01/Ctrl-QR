@@ -14,8 +14,8 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Mixin(HandledScreen.class)
 @Environment(EnvType.CLIENT)
+@Mixin(HandledScreen.class)
 public class MixinHandledScreen extends Screen {
     protected MixinHandledScreen(Text title) {
         super(title);
