@@ -34,7 +34,7 @@ dependencies {
 
 processResources {
     inputs.property "group", rootProject.maven_group
-    inputs.property "version", project.version
+    inputs.property "version", rootProject.mod_version
 
     inputs.property "name", rootProject.mod_name
     inputs.property "description", rootProject.mod_description
@@ -43,7 +43,7 @@ processResources {
 
     filesMatching("quilt.mod.json") {
         expand "group": rootProject.maven_group,
-                "version": project.version,
+                "version": rootProject.mod_version,
                 "name": rootProject.mod_name,
                 "description": rootProject.mod_description,
                 "author": rootProject.mod_author,
@@ -91,5 +91,34 @@ publishing {
     // See https://docs.gradle.org/current/userguide/publishing_maven.html for information on how to set up publishing.
     repositories {
         // Add repositories to publish to here.
+    }
+}
+
+// "borrowed" from REI
+unifiedPublishing {
+    project {
+        displayName = "[Quilt $rootProject.minecraft_version] v$rootProject.mod_version"
+        releaseType = "alpha"
+        gameVersions = ["1.18.2"]
+        gameLoaders = ["quilt"]
+        changelog = rootProject.releaseChangelog
+
+        mainPublication remapJar
+
+        if (project.hasProperty("curseforge_token") || System.getenv("curseforge_token") != null) {
+            curseforge {
+                token = project.hasProperty("curseforge_token") ? project.property("curseforge_token") : System.getenv("curseforge_token")
+                id = "ZZZZZZ"
+                gameVersions.addAll "Java 17", "1.18-Snapshot"
+            }
+        }
+
+        if (project.hasProperty("modrinth_token") || System.getenv("modrinth_token") != null) {
+            modrinth {
+                token = project.hasProperty("modrinth_token") ? project.property("modrinth_token") : System.getenv("modrinth_token")
+                id = "ZZZZZZ"
+                version = "$rootProject.mod_version+$project.name"
+            }
+        }
     }
 }
