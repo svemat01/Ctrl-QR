@@ -30,8 +30,8 @@ allprojects {
     apply plugin: "me.shedaniel.unified-publishing"
     apply plugin: "maven-publish"
 
-    archivesBaseName = "${rootProject.archives_base_name}"
-    version = "${rootProject.mod_version}-${project.name}-${rootProject.minecraft_version}"
+    archivesBaseName = rootProject.archives_base_name
+    version = "${project.name}-${rootProject.mod_version}+${rootProject.minecraft_version}"
     group = rootProject.maven_group
 
     repositories {
@@ -72,7 +72,7 @@ task release {
     }
     def time = df.format(new Date())
     def changes = new StringBuilder()
-    changes << "## CTRL-QR v$rootProject.mod_version for $project.minecraft_version\nUpdated at **$time**.\n[Click here for changelog](https://www.github.com/unilock/Ctrl-QR/commits/$branch)"
+    changes << "## CTRL-QR v${rootProject.mod_version} for ${project.minecraft_version}\nUpdated at **${time}**.\n[Click here for changelog](https://www.github.com/unilock/Ctrl-QR/commits/${branch})"
     def proc = "git log --max-count=200 --pretty=format:%s".execute()
     proc.in.eachLine { line ->
         def processedLine = line.toString()
