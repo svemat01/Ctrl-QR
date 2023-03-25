@@ -97,9 +97,9 @@ publishing {
 // "borrowed" from REI
 unifiedPublishing {
     project {
-        displayName = "[Quilt $rootProject.minecraft_version] v$rootProject.mod_version"
+        displayName = "[Quilt ${rootProject.minecraft_version}] v${rootProject.mod_version}"
         releaseType = "alpha"
-        gameVersions = ["1.18.2"]
+        gameVersions = ["1.18", "1.18.1", "1.18.2", "1.19", "1.19.1", "1.19.2"]
         gameLoaders = ["quilt"]
         changelog = rootProject.releaseChangelog
 
@@ -109,7 +109,7 @@ unifiedPublishing {
             curseforge {
                 token = project.hasProperty("curseforge_token") ? project.property("curseforge_token") : System.getenv("curseforge_token")
                 id = "ZZZZZZ"
-                gameVersions.addAll "Java 17", "1.18-Snapshot"
+                gameVersions.addAll "Java 17"
             }
         }
 
@@ -117,7 +117,7 @@ unifiedPublishing {
             modrinth {
                 token = project.hasProperty("modrinth_token") ? project.property("modrinth_token") : System.getenv("modrinth_token")
                 id = "ZZZZZZ"
-                version = "$rootProject.mod_version+$project.name"
+                version = "${rootProject.mod_version}+${project.name}"
             }
         }
     }
