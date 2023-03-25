@@ -94,7 +94,7 @@ unifiedPublishing {
     project {
         displayName = "[Forge ${rootProject.minecraft_version}] v${rootProject.mod_version}"
         releaseType = "beta"
-        gameVersions = ["1.18", "1.18.1", "1.18.2", "1.19", "1.19.1", "1.19.2"]
+        gameVersions = ["1.19.3", "1.19.4"]
         gameLoaders = ["forge"]
         changelog = rootProject.releaseChangelog
 
