@@ -23,7 +23,8 @@ public class MixinHandledScreen extends Screen {
 
     @ModifyArg(method = "keyPressed", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/ingame/HandledScreen;onMouseClick(Lnet/minecraft/screen/slot/Slot;IILnet/minecraft/screen/slot/SlotActionType;)V"), index = 2)
     private int hasCtrlDown(int isCtrlDown) {
-        return InputUtil.isKeyPressed(MinecraftClient.getInstance().getWindow().getHandle(), GLFW.GLFW_KEY_LEFT_CONTROL) || InputUtil.isKeyPressed(MinecraftClient.getInstance().getWindow().getHandle(), GLFW.GLFW_KEY_RIGHT_CONTROL) ? 1 : 0;
+        var handle = MinecraftClient.getInstance().getWindow().getHandle();
+        return InputUtil.isKeyPressed(handle, GLFW.GLFW_KEY_LEFT_CONTROL) || InputUtil.isKeyPressed(handle, GLFW.GLFW_KEY_RIGHT_CONTROL) ? 1 : 0;
     }
 
     @Inject(method = "init", at = @At(value = "TAIL"))
