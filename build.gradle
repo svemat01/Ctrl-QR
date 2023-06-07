@@ -1,10 +1,7 @@
-import java.text.SimpleDateFormat
-
 plugins {
     id "architectury-plugin" version "3.4-SNAPSHOT"
-    id "dev.architectury.loom" version "0.12.0-SNAPSHOT" apply false
-    id "io.github.juuxel.loom-quiltflower" version "1.8.0" apply false
-    id "me.shedaniel.unified-publishing" version "0.1.+"
+    id "dev.architectury.loom" version "1.1-SNAPSHOT" apply false
+    id "io.github.juuxel.loom-quiltflower" version "1.10.0" apply false
 }
 
 architectury {
@@ -15,9 +12,6 @@ subprojects {
     apply plugin: "dev.architectury.loom"
     apply plugin: "io.github.juuxel.loom-quiltflower"
 
-    loom {
-    }
-
     dependencies {
         minecraft "com.mojang:minecraft:${rootProject.minecraft_version}"
         mappings "net.fabricmc:yarn:${rootProject.yarn_mappings}:v2"
@@ -27,11 +21,10 @@ subprojects {
 allprojects {
     apply plugin: "java"
     apply plugin: "architectury-plugin"
-    apply plugin: "me.shedaniel.unified-publishing"
     apply plugin: "maven-publish"
 
-    archivesBaseName = rootProject.archives_base_name
-    version = "${project.name}-${rootProject.mod_version}+${rootProject.minecraft_version}"
+    archivesBaseName = "${rootProject.archives_base_name}-${project.name}"
+    version = "${rootProject.mod_version}+${rootProject.minecraft_version}"
     group = rootProject.maven_group
 
     repositories {
@@ -49,44 +42,5 @@ allprojects {
 
     java {
         withSourcesJar()
-    }
-}
-
-// "borrowed" from REI
-ext {
-    releaseChangelog = "No changelog"
-}
-
-task release {
-    def df = new SimpleDateFormat("yyyy-MM-dd HH:mm")
-    df.setTimeZone(TimeZone.getTimeZone("UTC"))
-    def branch
-    if (System.env.BRANCH_NAME) {
-        branch = System.env.BRANCH_NAME
-        branch = branch.substring(branch.lastIndexOf("/") + 1)
-    } else {
-        branch = "git rev-parse --abbrev-ref HEAD".execute().in.text.trim()
-    }
-    if (branch == "HEAD") {
-        branch = "git rev-parse --short HEAD".execute().in.text.trim()
-    }
-    def time = df.format(new Date())
-    def changes = new StringBuilder()
-    changes << "## CTRL-QR v${rootProject.mod_version} for ${project.minecraft_version}\nUpdated at **${time}**.\n[Click here for changelog](https://www.github.com/unilock/Ctrl-QR/commits/${branch})"
-    def proc = "git log --max-count=200 --pretty=format:%s".execute()
-    proc.in.eachLine { line ->
-        def processedLine = line.toString()
-        changes << "\n- ${processedLine.capitalize()}"
-    }
-    proc.waitFor()
-    releaseChangelog = changes.toString()
-    if (subprojects.any { it.name == "fabric" }) {
-        dependsOn project("fabric").tasks.getByName("publishUnified")
-    }
-    if (subprojects.any { it.name == "forge" }) {
-        dependsOn project("forge").tasks.getByName("publishUnified")
-    }
-    if (subprojects.any { it.name == "quilt" }) {
-        dependsOn project("quilt").tasks.getByName("publishUnified")
     }
 }

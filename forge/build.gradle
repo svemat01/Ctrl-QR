@@ -15,7 +15,7 @@ loom {
 
 configurations {
     common
-    shadowCommon // Don't use shadow from the shadow plugin because we don't want IDEA to index this.
+    shadowCommon // Don't use shadow from the shadow plugin since it *excludes* files.
     compileClasspath.extendsFrom common
     runtimeClasspath.extendsFrom common
     developmentForge.extendsFrom common
@@ -47,7 +47,6 @@ processResources {
 
 shadowJar {
     exclude "fabric.mod.json"
-    exclude "architectury.common.json"
 
     configurations = [project.configurations.shadowCommon]
     classifier "dev-shadow"
@@ -86,34 +85,5 @@ publishing {
     // See https://docs.gradle.org/current/userguide/publishing_maven.html for information on how to set up publishing.
     repositories {
         // Add repositories to publish to here.
-    }
-}
-
-// "borrowed" from REI
-unifiedPublishing {
-    project {
-        displayName = "[Forge ${rootProject.minecraft_version}] v${rootProject.mod_version}"
-        releaseType = "beta"
-        gameVersions = ["1.18", "1.18.1", "1.18.2", "1.19", "1.19.1", "1.19.2"]
-        gameLoaders = ["forge"]
-        changelog = rootProject.releaseChangelog
-
-        mainPublication remapJar
-
-        if (project.hasProperty("curseforge_token") || System.getenv("curseforge_token") != null) {
-            curseforge {
-                token = project.hasProperty("curseforge_token") ? project.property("curseforge_token") : System.getenv("curseforge_token")
-                id = "ZZZZZZ"
-                gameVersions.addAll "Java 17"
-            }
-        }
-
-        if (project.hasProperty("modrinth_token") || System.getenv("modrinth_token") != null) {
-            modrinth {
-                token = project.hasProperty("modrinth_token") ? project.property("modrinth_token") : System.getenv("modrinth_token")
-                id = "ZZZZZZ"
-                version = "${rootProject.mod_version}+${project.name}"
-            }
-        }
     }
 }
