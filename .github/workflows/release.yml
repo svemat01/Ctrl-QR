@@ -1,6 +1,12 @@
 name: Release
 
-on: [ workflow_dispatch ]
+on:
+  workflow_dispatch:
+    inputs:
+      publish:
+        description: 'Publish a new release'
+        required: true
+        default: true
 
 jobs:
   release:
@@ -27,16 +33,29 @@ jobs:
         env:
           BRANCH_NAME: ${{ github.ref }}
 
+      # Upload artifacts from the 'out' folder
+      - name: Upload 'out' folder
+        uses: actions/upload-artifact@v2
+        with:
+          name: out-artifacts
+          path: out
+          retention-days: 1
+
+      # Upload artifacts from the 'build' folder
+      - name: Upload 'build' folder
+        uses: actions/upload-artifact@v2
+        with:
+          name: build-artifacts
+          path: build
+          retention-days: 1
+
       - name: Create GitHub Release
         id: create_release
         uses: softprops/action-gh-release@v1
         with:
           files: |
-            ./build/libs/*.jar  # Adjust the path to your JAR files
-          name: Release ${{ github.ref }}
+            ./path/to/your/project/build/libs/*.jar
+          title: Release ${{ github.ref }}
           tag_name: ${{ github.ref | replace('refs/heads/', '') | replace('refs/tags/', '') }}
           draft: false
           prerelease: false
-
-      - name: Set release ID
-        run: echo "::set-output name=release_id::${{ steps.create_release.outputs.id }}"
