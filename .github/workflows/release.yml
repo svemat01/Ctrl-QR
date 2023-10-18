@@ -33,8 +33,8 @@ jobs:
         with:
           files: |
             ./build/libs/*.jar  # Adjust the path to your JAR files
-          title: Release ${{ github.ref }}
-          tag_name: ${{ github.ref }}
+          name: Release ${{ github.ref }}
+          tag_name: ${{ github.ref | replace('refs/heads/', '') | replace('refs/tags/', '') }}
           draft: false
           prerelease: false
 
