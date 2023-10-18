@@ -20,7 +20,7 @@ jobs:
 
       - name: Make Gradle wrapper executable
         if: ${{ runner.os != 'Windows' }}
-        run: chmod +x ./gradle
+        run: chmod +x ./gradlew
 
       - name: Build JARs
         run: ./gradlew build --stacktrace
