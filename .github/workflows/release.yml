@@ -55,7 +55,7 @@ jobs:
         with:
           files: |
             ./path/to/your/project/build/libs/*.jar
-          title: Release ${{ github.ref }}
-          tag_name: ${{ github.ref | replace('refs/heads/', '') | replace('refs/tags/', '') }}
+          name: Release ${{ github.ref }}
+          tag_name: yeet/${{ github.ref }}
           draft: false
           prerelease: false
