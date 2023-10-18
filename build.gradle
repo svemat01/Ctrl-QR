@@ -80,13 +80,4 @@ task release {
     }
     proc.waitFor()
     releaseChangelog = changes.toString()
-    if (subprojects.any { it.name == "fabric" }) {
-        dependsOn project("fabric").tasks.getByName("publishUnified")
-    }
-    if (subprojects.any { it.name == "forge" }) {
-        dependsOn project("forge").tasks.getByName("publishUnified")
-    }
-    if (subprojects.any { it.name == "quilt" }) {
-        dependsOn project("quilt").tasks.getByName("publishUnified")
-    }
 }
