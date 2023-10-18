@@ -20,11 +20,23 @@ jobs:
 
       - name: Make Gradle wrapper executable
         if: ${{ runner.os != 'Windows' }}
-        run: chmod +x ./gradlew
+        run: chmod +x ./gradle
 
-      - name: Build & Upload
-        run: ./gradlew build fabric:publishUnified forge:publishUnified quilt:publishUnified --stacktrace
+      - name: Build JARs
+        run: ./gradlew build --stacktrace
         env:
-          curseforge_token: ${{ secrets.CURSEFORGE_TOKEN }}
-          modrinth_token: ${{ secrets.MODRINTH_TOKEN }}
           BRANCH_NAME: ${{ github.ref }}
+
+      - name: Create GitHub Release
+        id: create_release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            ./build/libs/*.jar  # Adjust the path to your JAR files
+          title: Release ${{ github.ref }}
+          tag_name: ${{ github.ref }}
+          draft: false
+          prerelease: false
+
+      - name: Set release ID
+        run: echo "::set-output name=release_id::${{ steps.create_release.outputs.id }}"
